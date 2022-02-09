@@ -1,0 +1,23 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/lib/signalr/",
+      "files": [
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "tagify@4.9.6",
+      "destination": "wwwroot/lib/tagify/",
+      "files": [
+        "tagify.min.js",
+        "jQuery.tagify.min.js",
+        "tagify.css"
+      ]
+    }
+  ]
+}
