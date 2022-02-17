@@ -1,0 +1,93 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TicTacToe.Models;
+
+#nullable disable
+
+namespace TicTacToe.Services.DataContext
+{
+    public partial class AppDbContext : DbContext
+    {
+        public AppDbContext()
+        {
+        }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<SessionData> Sessions { get; set; }
+        public virtual DbSet<SessionTag> SessionTags { get; set; }
+        public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<User> Users { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("name=default");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasAnnotation("Relational:Collation", "Cyrillic_General_CI_AS");
+
+            modelBuilder.Entity<SessionData>(entity =>
+            {
+                entity.HasIndex(e => e.CreatorId, "IX_GameInfoDatas_CreatorId");
+
+                entity.HasOne(d => d.Creator)
+                    .WithMany(p => p.Sessions)
+                    .HasForeignKey(d => d.CreatorId)
+                    .HasConstraintName("FK_GameSession_To_Users");
+            });
+
+            modelBuilder.Entity<SessionTag>(entity =>
+            {
+                entity.HasIndex(e => e.SessionId, "IX_SessionTags_SessionId");
+
+                entity.HasOne(d => d.Session)
+                    .WithMany(p => p.SessionTags)
+                    .HasForeignKey(d => d.SessionId)
+                    .HasConstraintName("FK_SessionTags_To_GameSession");
+
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.SessionTags)
+                    .HasForeignKey(d => d.TagId)
+                    .HasConstraintName("FK_SessionTags_To_GameSession");
+            });
+
+            modelBuilder.Entity<Tag>(entity =>
+            {
+                entity.HasIndex(e => e.Value, "UQ_Text")
+                    .IsUnique();
+
+                entity.Property(e => e.Value)
+                    .IsRequired()
+                    .HasMaxLength(32);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Login, "UQ_Login")
+                    .IsUnique();
+
+                entity.Property(e => e.Login)
+                    .IsRequired()
+                    .HasMaxLength(64);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(32);
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    }
+}
