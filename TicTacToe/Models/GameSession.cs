@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
 namespace TicTacToe.Models
 {
     public class GameSession
     {
-        public GameInstance Instance { get; }
-
         public SessionData Data { get; }
+        public GameInstance Instance { get; }
 
         public GameSession(SessionData gameDate)
         {
@@ -19,7 +16,7 @@ namespace TicTacToe.Models
 
         public GameSession(SessionData gameData, GameInstance gameInstance)
         {
-            this.Date = gameData;
+            this.Data = gameData;
             this.Instance = gameInstance;
         }
 

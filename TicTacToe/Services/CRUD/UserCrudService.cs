@@ -29,7 +29,7 @@ namespace TicTacToe.Services.CRUD
             await unitOfWork.DbContext.SaveChangesAsync();
         }
 
-        public async Task<User> GetByLoginAssync(string login)
+        public async Task<User> GetByLoginAsync(string login)
         {
             var user = await unitOfWork.DbContext.Users.FirstOrDefaultAsync(u => u.Login == login);
             return user;

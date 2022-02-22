@@ -18,6 +18,7 @@ namespace TicTacToe.Services.DataContext
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
 
         public virtual DbSet<SessionData> Sessions { get; set; }
@@ -59,7 +60,7 @@ namespace TicTacToe.Services.DataContext
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.SessionTags)
                     .HasForeignKey(d => d.TagId)
-                    .HasConstraintName("FK_SessionTags_To_GameSession");
+                    .HasConstraintName("FK_SessionTags_To_Tags");
             });
 
             modelBuilder.Entity<Tag>(entity =>

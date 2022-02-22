@@ -6,7 +6,7 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Services.DataContext
 {
-    public class UnitOfWork : IUnitOfWOrk
+    public class UnitOfWork : IUnitOfWork
     {
         public AppDbContext DbContext { get; }
 
